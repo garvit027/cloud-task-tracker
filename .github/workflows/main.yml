@@ -43,4 +43,4 @@ jobs:
           channelId: live
           projectId: cloud-task-tracker-ci-cd
           # Deploy hosting (frontend build output) and functions (backend) simultaneously
-          entryPoint: ./ # Execute deployment from the repository root
+          entryPoint: ./backend/  # Execute deployment from the repository root
