@@ -1,0 +1,46 @@
+name: Deploy Final Cloud Microservice
+
+on:
+  push:
+    branches:
+      - main  # Trigger only on pushes to the main branch
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout Code
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js (Use the current LTS version)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a stable LTS version compatible with functions
+
+      # 3. Install Functions Dependencies (CRITICAL: Needs to be separate)
+      - name: Install Functions Dependencies
+        run: npm install
+        working-directory: ./backend/functions # Run install in the functions folder
+
+      # 4. Install Frontend Dependencies and Build (CRITICAL: Use the fixed build script)
+      - name: Install Frontend Dependencies
+        run: npm install
+        working-directory: ./frontend
+        
+      - name: Run Vite Frontend Build
+        # This calls 'npm run build' which you fixed to be 'npm exec vite build'
+        run: npm run build
+        working-directory: ./frontend
+
+      # 5. Deploy to Firebase
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          # Token generated when you did the firebase init process
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLOUD_TASK_TRACKER_CI_CD }}
+          channelId: live
+          projectId: cloud-task-tracker-ci-cd
+          # Deploy hosting (frontend build output) and functions (backend) simultaneously
+          entryPoint: ./ # Execute deployment from the repository root
