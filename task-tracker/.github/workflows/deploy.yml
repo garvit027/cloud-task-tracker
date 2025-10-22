@@ -1,0 +1,46 @@
+name: Build and Deploy to Firebase
+
+# This makes the workflow run on every push to the 'main' branch
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build_and_deploy:
+    # This runs the job on a fresh "virtual computer"
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checks out your repository code
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        
+      # 2. Sets up Node.js so it can run 'npm' commands
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Use a stable Node.js version
+          
+      # 3. Installs dependencies for your React App (in the root)
+      - name: Install Root Dependencies
+        run: npm install
+        
+      # 4. Installs dependencies for your Firebase Functions
+      - name: Install Functions Dependencies
+        run: npm install
+        working-directory: ./functions # Runs the command inside the 'functions' folder
+            
+      # 5. Builds your React app for production (creates the 'dist' folder)
+      - name: Build React App
+        run: npm run build
+        
+      # 6. Deploys your app to Firebase
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          # This command deploys both Hosting (your React app) and Functions
+          args: deploy --only hosting,functions
+        env:
+          # This tells the action to use the secret 'password' you created
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
