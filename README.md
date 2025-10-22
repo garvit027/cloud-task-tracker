@@ -1,6 +1,6 @@
 # Microservice & CI/CD Task Tracker
 
-![Project Demo](https://i.ibb.co/tPJ46pD/demo.png)
+![Project Demo](https://ibb.co/tPJ46pD0)
 
 [![CI/CD Pipeline](https://github.com/garvit027/cloud-task-tracker/actions/workflows/deploy.yml/badge.svg)](https://github.com/garvit027/cloud-task-tracker/actions)
 
