@@ -1,0 +1,48 @@
+name: Build and Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checks out your repository code
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        
+      # 2. Sets up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      # 3. Installs dependencies for your React App
+      - name: Install Root Dependencies
+        run: npm install
+        working-directory: ./task-tracker
+        
+      # 4. Installs dependencies for your Firebase Functions
+      - name: Install Functions Dependencies
+        run: npm install
+        working-directory: ./task-tracker/functions 
+            
+      # 5. Builds your React app for production
+      - name: Build React App
+        run: npm run build
+        working-directory: ./task-tracker
+        
+      # 6. Deploys your app to Firebase
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          # This command deploys both Hosting and Functions
+          args: deploy --only hosting,functions
+        env:
+          # Use the secret token you created in GitHub
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          # Tell the action where your firebase.json file is
+          PROJECT_PATH: ./task-tracker
