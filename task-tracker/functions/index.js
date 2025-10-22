@@ -11,7 +11,7 @@ const db = admin.firestore();
 /**
  * Gets all tasks.
  */
-exports.getTasks = functions.https.onCall(async (data, context) => {
+exports.getTasks = functions.https.onCall(async (_data, _context) => {
   const tasksSnapshot = await db.collection("tasks").orderBy("createdAt", "desc").get();
   const tasks = [];
   tasksSnapshot.forEach((doc) => {
