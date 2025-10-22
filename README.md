@@ -1,5 +1,7 @@
 # Microservice & CI/CD Task Tracker
 
+![Project Demo](https://i.ibb.co/tPJ46pD/demo.png)
+
 [![CI/CD Pipeline](https://github.com/garvit027/cloud-task-tracker/actions/workflows/deploy.yml/badge.svg)](https://github.com/garvit027/cloud-task-tracker/actions)
 
 Hello! This is a full-stack, serverless task management application I built to demonstrate a modern microservice architecture. My project features a React frontend, a Firebase Functions backend, and a fully configured, automated CI/CD pipeline using GitHub Actions.
